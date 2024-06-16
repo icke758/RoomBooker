@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 	"log"
-	"unicode"
+	"room/models"
 )
 
 func ShowRooms() string {
@@ -18,42 +18,31 @@ func ShowRooms() string {
 
 	var result string
 	for rows.Next() {
-		var id int
-		var room int
-		var availability string
-		var price float32
+		var room models.Room
+		var avaliability int
 
-		err = rows.Scan(&id, &room, &availability, &price)
+		err = rows.Scan(&room.ID, &room.Number, &avaliability, &room.Price)
 		if err != nil {
 			log.Fatal(err)
 		}
-		result += fmt.Sprintf("Quarto: %d, Disponibilidade: %s, Preço: %.2f\n", room, availability, price)
+		room.Avaliability = models.AvaliabilityStatusFromInt(avaliability)
+		result += fmt.Sprintf("Quarto: %d, Disponibilidade: %s, Preço: %.2f\n", room.Number, room.Avaliability.ToString(), room.Price)
 	}
 	return result
 }
 
-func Clearstring(s string) string {
-	var result []rune
-	for _, char := range s {
-		if unicode.IsLetter(char) {
-			result = append(result, char)
-		}
-	}
-	return string(result)
-}
-
-func CreateRoom(number int, availability string, daily float64) {
+func CreateRoom(room models.Room) {
 	db := openDatabase()
 	defer db.Close()
 
-	Clearstring(availability)
+	availability := room.Avaliability.ToInt()
 
-	_, err := db.Exec("INSERT INTO rooms (number, availability, daily) VALUES (?, ?, ?);", number, availability, daily)
+	_, err := db.Exec("INSERT INTO rooms (number, avaliability, daily) VALUES (?, ?, ?);", room.Number, availability, room.Price)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Quarto número", number, "criado")
+	fmt.Println("Quarto número", room.Number, "criado")
 }
 
 func DeleteRoom(id int) {
