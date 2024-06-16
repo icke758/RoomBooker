@@ -8,7 +8,6 @@ import (
 
 func main() {
 	var userAction int
-	var roomNumber int
 
 	for {
 		menu.ShowMenuOptions()
@@ -16,12 +15,15 @@ func main() {
 		fmt.Scanf("%d", &userAction)
 		switch userAction {
 		case 1:
-			menu.ShowRoomsMenu(database.ShowRooms())
+			rooms := database.ShowRooms()
+			menu.ShowRoomsMenu(rooms)
 		case 2:
+			var roomNumber int
 			menu.ShowRoomsToBook()
 			fmt.Scanf("%d", &roomNumber)
 			database.BookRoom(roomNumber)
 		case 3:
+			var roomNumber int
 			database.UnbookRoom(roomNumber)
 		case 4:
 			room := menu.ShowCreateRoomMenu()
