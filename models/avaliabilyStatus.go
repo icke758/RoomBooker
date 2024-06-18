@@ -1,19 +1,34 @@
 package models
 
+import (
+	"strings"
+)
+
 type AvaliabilityStatus int
 
 const (
 	Unknown AvaliabilityStatus = iota
-	Alugado
-	Disponivel
+	Rented
+	Available
 )
 
 func AvaliabilityStatusFromInt(i int) AvaliabilityStatus {
 	switch i {
 	case 1:
-		return Alugado
+		return Rented
 	case 2:
-		return Disponivel
+		return Available
+	default:
+		return Unknown
+	}
+}
+
+func AvaliabilityStatusFromString(s string) AvaliabilityStatus {
+	switch strings.ToLower(s) {
+	case "alugado":
+		return Rented
+	case "disponivel":
+		return Available
 	default:
 		return Unknown
 	}
@@ -25,22 +40,11 @@ func (a AvaliabilityStatus) ToInt() int {
 
 func (a AvaliabilityStatus) ToString() string {
 	switch a {
-	case Alugado:
+	case Rented:
 		return "alugado"
-	case Disponivel:
+	case Available:
 		return "disponivel"
 	default:
 		return "unknown"
-	}
-}
-
-func AvaliabilityStatusFromString(s string) AvaliabilityStatus {
-	switch s {
-	case "alugado":
-		return Alugado
-	case "disponivel":
-		return Disponivel
-	default:
-		return Unknown
 	}
 }
