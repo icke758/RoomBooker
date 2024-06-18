@@ -58,7 +58,7 @@ func ShowCreateRoomMenu() models.Room {
 	fmt.Println("Criar quarto")
 	fmt.Println("Numero do quarto: ")
 	fmt.Scanf("%d", &roomNumber)
-	fmt.Println("Disponibilidade (1 para alugado, 2 para disponivel): ")
+	fmt.Printf("Disponibilidade (%d para alugado, %d para disponivel): ", models.Rented.ToInt(), models.Available.ToInt())
 	fmt.Scanf("%d", &roomAvailability)
 	fmt.Println("Preço diário: ")
 	fmt.Scanf("%f", &daily)
@@ -104,4 +104,12 @@ func DeletedRoomMessage(id int) {
 	fmt.Println(message)
 }
 
-//TODO: ADD THE LOGIC TO SHOW THE MESSAGE TO BOOKED ROOM THAT DOES NOT COLLAPSE ON THE BOOKED RULE
+func BookRoomMessage(number int) {
+	message := services.BookRoomWithMessage(number)
+	fmt.Println(message)
+}
+
+func UnBookRoomMessage(number int) {
+	message := services.UnBookRoomWithMessage(number)
+	fmt.Println(message)
+}

@@ -6,22 +6,22 @@ import (
 	"room/models"
 )
 
-func BookRoom(roomNumber int) {
-	booking := database.CheckBooking(roomNumber)
-	if models.AvaliabilityStatusFromInt(booking) == models.Available {
-		database.BookRoom(roomNumber)
-	} else {
-		fmt.Println("Esse quarto já está reservado")
-	}
-}
-
-func UnbookRoom(roomNumber int) {
+func BookRoom(roomNumber int) bool {
 	booking := database.CheckBooking(roomNumber)
 	if models.AvaliabilityStatusFromInt(booking) == models.Rented {
-		database.UnbookRoom(roomNumber)
-	} else {
-		fmt.Println("Esse quarto já está liberado")
+		return false
 	}
+	database.BookRoom(roomNumber)
+	return true
+}
+
+func UnbookRoom(roomNumber int) bool {
+	booking := database.CheckBooking(roomNumber)
+	if models.AvaliabilityStatusFromInt(booking) == models.Available {
+		return false
+	}
+	database.UnbookRoom(roomNumber)
+	return true
 }
 
 func CreateRoomWithMessage(room models.Room) string {
@@ -38,4 +38,20 @@ func DeleteRoomWithMessage(id int) string {
 		return fmt.Sprintf("Falha ao apagar o quarto com o id: %d", id)
 	}
 	return fmt.Sprintf("Sucesso ao apagar o quarto com o id: %d", id)
+}
+
+func BookRoomWithMessage(number int) string {
+	success := BookRoom(number)
+	if !success {
+		return fmt.Sprintf("Falha ao reservar o quarto com o número, esse quarto já está reservado: %d", number)
+	}
+	return fmt.Sprintf("Sucesso ao reservar o quarto com o número: %d", number)
+}
+
+func UnBookRoomWithMessage(number int) string {
+	success := UnbookRoom(number)
+	if !success {
+		return fmt.Sprintf("Falha ao liberar o quarto com o número, esse quarto já está reservado: %d", number)
+	}
+	return fmt.Sprintf("Sucesso ao liberar o quarto com o número: %d", number)
 }

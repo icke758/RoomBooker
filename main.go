@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"room/menu"
-	"room/services"
 )
 
 func main() {
@@ -21,12 +20,12 @@ func main() {
 			var roomNumber int
 			menu.ShowRoomsToBook()
 			fmt.Scanf("%d", &roomNumber)
-			services.BookRoom(roomNumber)
+			menu.BookRoomMessage(roomNumber)
 		case 3:
 			var roomNumber int
 			menu.ShowRoomsToUnBook()
 			fmt.Scanf("%d", &roomNumber)
-			services.UnbookRoom(roomNumber)
+			menu.UnBookRoomMessage(roomNumber)
 		case 4:
 			room := menu.ShowCreateRoomMenu()
 			menu.CreatedRoomMessage(room)
