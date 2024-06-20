@@ -5,4 +5,5 @@ type Room struct {
 	Number       int
 	Avaliability AvaliabilityStatus
 	Price        float32
+	Period       int
 }

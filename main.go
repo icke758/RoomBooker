@@ -17,10 +17,8 @@ func main() {
 			rooms := menu.ShowRooms()
 			menu.ShowRoomsMenu(rooms)
 		case 2:
-			var roomNumber int
-			menu.ShowRoomsToBook()
-			fmt.Scanf("%d", &roomNumber)
-			menu.BookRoomMessage(roomNumber)
+			roomNumber, period := menu.ShowRoomsToBook()
+			menu.BookRoomMessage(roomNumber, period)
 		case 3:
 			var roomNumber int
 			menu.ShowRoomsToUnBook()

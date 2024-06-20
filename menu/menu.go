@@ -37,12 +37,12 @@ func ShowRooms() string {
 	for rows.Next() {
 		var room models.Room
 		var availability int
-		err = rows.Scan(&room.Number, &availability, &room.Price)
+		err = rows.Scan(&room.Number, &availability, &room.Price, &room.Period)
 		if err != nil {
 			log.Fatal(err)
 		}
 		room.Avaliability = models.AvaliabilityStatusFromInt(availability)
-		result += fmt.Sprintf("Quarto: %d, Disponibilidade: %s, Preço: %.2f\n", room.Number, room.Avaliability.ToString(), room.Price)
+		result += fmt.Sprintf("Quarto: %d, Disponibilidade: %s, Preço: %.2f, Período da reserva: %d\n", room.Number, room.Avaliability.ToString(), room.Price, room.Period)
 	}
 	if err = rows.Err(); err != nil {
 		log.Fatal(err)
@@ -79,9 +79,16 @@ func ShowRoomsMenu(rooms string) {
 	fmt.Println(rooms)
 }
 
-func ShowRoomsToBook() {
+func ShowRoomsToBook() (int, int) {
+	var roomNumber, period int
+
 	fmt.Println("Reservar quarto")
 	fmt.Println("Quarto a ser reservado: ")
+	fmt.Scanf("%d", &roomNumber)
+	fmt.Println("Quarto a ser reservado: ")
+	fmt.Scanf("%d", &period)
+
+	return roomNumber, period
 }
 
 func ShowRoomsToUnBook() {
@@ -104,8 +111,8 @@ func DeletedRoomMessage(id int) {
 	fmt.Println(message)
 }
 
-func BookRoomMessage(number int) {
-	message := services.BookRoomWithMessage(number)
+func BookRoomMessage(number int, period int) {
+	message := services.BookRoomWithMessage(number, period)
 	fmt.Println(message)
 }
 

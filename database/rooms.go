@@ -8,7 +8,7 @@ import (
 
 func FindRooms() (*sql.Rows, error) {
 	db := openDatabase()
-	rows, err := db.Query("SELECT number, avaliability, daily FROM rooms;")
+	rows, err := db.Query("SELECT number, avaliability, daily, period FROM rooms;")
 	if err != nil {
 		db.Close()
 		return nil, err
@@ -22,7 +22,7 @@ func CreateRoom(room models.Room) bool {
 
 	availability := room.Avaliability.ToInt()
 
-	_, err := db.Exec("INSERT INTO rooms (number, avaliability, daily) VALUES (?, ?, ?);", room.Number, availability, room.Price)
+	_, err := db.Exec("INSERT INTO rooms (number, avaliability, daily, period) VALUES (?, ?, ?, ?);", room.Number, availability, room.Price, room.Period)
 	if err != nil {
 		log.Fatal(err)
 		return false
