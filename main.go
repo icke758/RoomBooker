@@ -32,6 +32,9 @@ func main() {
 			menu.ShowDeleteText()
 			fmt.Scanf("%d", &id)
 			menu.DeletedRoomMessage(id)
+		case 6:
+			roomNumber := menu.ShowReceiptMenu()
+			menu.ShowReceipt(roomNumber)
 		default:
 			fmt.Println("Ok, adeus! :D")
 			return

@@ -6,7 +6,7 @@ import (
 	"room/models"
 )
 
-func CreateRoomWithMessage(room models.Room) string {
+func CreateRoomLog(room models.Room) string {
 	success := database.CreateRoom(room)
 	if !success {
 		return fmt.Sprintf("Falha ao criar quarto com o número: %d.", room.Number)
@@ -14,7 +14,7 @@ func CreateRoomWithMessage(room models.Room) string {
 	return fmt.Sprintf("Quarto de número: %d adicionado com sucesso!", room.Number)
 }
 
-func DeleteRoomWithMessage(id int) string {
+func DeleteRoomLog(id int) string {
 	success := database.DeleteRoom(id)
 	if !success {
 		return fmt.Sprintf("Falha ao apagar o quarto com o id: %d", id)
@@ -22,7 +22,7 @@ func DeleteRoomWithMessage(id int) string {
 	return fmt.Sprintf("Sucesso ao apagar o quarto com o id: %d", id)
 }
 
-func BookRoomWithMessage(number int, period int) string {
+func BookRoomLog(number int, period int) string {
 	success := BookRoom(number, period)
 	if !success {
 		return fmt.Sprintf("Falha ao reservar o quarto com o número, esse quarto já está reservado: %d", number)

@@ -16,6 +16,7 @@ func ShowMenuOptions() {
 		"3": "Disponibilizar quarto",
 		"4": "Criar quarto",
 		"5": "Apagar quarto",
+		"6": "Mostrar recibo",
 	}
 
 	keys := utils.SortKeys(menuMap)
@@ -74,18 +75,40 @@ func ShowCreateRoomMenu() models.Room {
 	return room
 }
 
+func ShowReceiptMenu() int {
+	var roomNumber int
+
+	fmt.Println("Digite o número do quaro que você deseja ver o recibo: ")
+	fmt.Scanf("%d", &roomNumber)
+
+	return roomNumber
+}
+
+func ShowReceipt(roomNumber int) {
+	fmt.Println("Mostrar recibo")
+	receiptData := services.CreateReceipt(roomNumber)
+	fmt.Println("		_._._._ ROOM BOOKER _._._._")
+	fmt.Println("		-------    Recibo   -------")
+	fmt.Printf("Número: 			%d\n", receiptData.Number)
+	fmt.Printf("Disponibilidade: 		%s\n", receiptData.Avaliability.ToString())
+	fmt.Printf("Período: 			%d dias\n", receiptData.Period)
+	fmt.Printf("Preço diário: 			%.2f\n", receiptData.Price)
+	fmt.Printf("Preço total: 			%.2f\n", receiptData.TotalAmount)
+	fmt.Println("----------------------------------")
+}
+
 func ShowRoomsMenu(rooms string) {
 	fmt.Println("Mostrar quartos")
 	fmt.Println(rooms)
 }
 
-func ShowRoomsToBook() (int, int) {
+func ShowRoomsToBook() (int, int) { //TODO: Separar essa função de mostrar entre Quarto e Periodo, pra eu poder verificar se o quarto vai poder ser reservado antes de pedir o período
 	var roomNumber, period int
 
 	fmt.Println("Reservar quarto")
 	fmt.Println("Quarto a ser reservado: ")
 	fmt.Scanf("%d", &roomNumber)
-	fmt.Println("Quarto a ser reservado: ")
+	fmt.Println("Período da reserva: ")
 	fmt.Scanf("%d", &period)
 
 	return roomNumber, period
@@ -102,17 +125,17 @@ func ShowDeleteText() {
 }
 
 func CreatedRoomMessage(room models.Room) {
-	message := services.CreateRoomWithMessage(room)
+	message := services.CreateRoomLog(room)
 	fmt.Println(message)
 }
 
 func DeletedRoomMessage(id int) {
-	message := services.DeleteRoomWithMessage(id)
+	message := services.DeleteRoomLog(id)
 	fmt.Println(message)
 }
 
 func BookRoomMessage(number int, period int) {
-	message := services.BookRoomWithMessage(number, period)
+	message := services.BookRoomLog(number, period)
 	fmt.Println(message)
 }
 

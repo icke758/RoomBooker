@@ -16,6 +16,23 @@ func FindRooms() (*sql.Rows, error) {
 	return rows, nil
 }
 
+func FindRoomByNumber(roomNumber int) (models.Room, error) {
+	db := openDatabase()
+
+	var room models.Room
+	var availability int
+
+	err := db.QueryRow("SELECT number, avaliability, daily, period FROM rooms WHERE number = ?;", roomNumber).Scan(&room.Number, &availability, &room.Price, &room.Period)
+	if err != nil {
+		db.Close()
+		return room, err
+	}
+
+	room.Avaliability = models.AvaliabilityStatusFromInt(availability)
+
+	return room, nil
+}
+
 func CreateRoom(room models.Room) bool {
 	db := openDatabase()
 	defer db.Close()
