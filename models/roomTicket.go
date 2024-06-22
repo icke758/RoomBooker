@@ -1,9 +1,10 @@
 package models
 
-type Room struct {
+type RoomTicket struct {
 	ID           int
 	Number       int
 	Avaliability AvaliabilityStatus
 	Price        float32
+	TotalAmount  float64
 	Period       int
 }

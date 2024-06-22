@@ -1,58 +1,60 @@
 package database
 
 import (
-	"fmt"
+	"database/sql"
 	"log"
 	"room/models"
 )
 
-func ShowRooms() string {
+func FindRooms() (*sql.Rows, error) {
 	db := openDatabase()
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM rooms;")
+	rows, err := db.Query("SELECT number, avaliability, daily, period FROM rooms;")
 	if err != nil {
-		log.Fatal(err)
+		db.Close()
+		return nil, err
 	}
-	defer rows.Close()
-
-	var result string
-	for rows.Next() {
-		var room models.Room
-		var avaliability int
-
-		err = rows.Scan(&room.ID, &room.Number, &avaliability, &room.Price)
-		if err != nil {
-			log.Fatal(err)
-		}
-		room.Avaliability = models.AvaliabilityStatusFromInt(avaliability)
-		result += fmt.Sprintf("Quarto: %d, Disponibilidade: %s, Preço: %.2f\n", room.Number, room.Avaliability.ToString(), room.Price)
-	}
-	return result
+	return rows, nil
 }
 
-func CreateRoom(room models.Room) {
+func FindRoomByNumber(roomNumber int) (models.Room, error) {
+	db := openDatabase()
+
+	var room models.Room
+	var availability int
+
+	err := db.QueryRow("SELECT number, avaliability, daily, period FROM rooms WHERE number = ?;", roomNumber).Scan(&room.Number, &availability, &room.Price, &room.Period)
+	if err != nil {
+		db.Close()
+		return room, err
+	}
+
+	room.Avaliability = models.AvaliabilityStatusFromInt(availability)
+
+	return room, nil
+}
+
+func CreateRoom(room models.Room) bool {
 	db := openDatabase()
 	defer db.Close()
 
 	availability := room.Avaliability.ToInt()
 
-	_, err := db.Exec("INSERT INTO rooms (number, avaliability, daily) VALUES (?, ?, ?);", room.Number, availability, room.Price)
+	_, err := db.Exec("INSERT INTO rooms (number, avaliability, daily, period) VALUES (?, ?, ?, ?);", room.Number, availability, room.Price, room.Period)
 	if err != nil {
 		log.Fatal(err)
+		return false
 	}
-
-	fmt.Println("Quarto número", room.Number, "criado")
+	return true
 }
 
-func DeleteRoom(id int) {
+func DeleteRoom(id int) bool {
 	db := openDatabase()
 	defer db.Close()
 
 	_, err := db.Exec("DELETE FROM rooms WHERE id = ?", id)
 	if err != nil {
 		log.Fatal(err)
+		return false
 	}
-
-	fmt.Println("Quarto com o Id:", id, "deletado")
+	return true
 }

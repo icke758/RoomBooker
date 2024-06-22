@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"room/database"
 	"room/menu"
 )
 
@@ -15,24 +14,28 @@ func main() {
 		fmt.Scanf("%d", &userAction)
 		switch userAction {
 		case 1:
-			rooms := database.ShowRooms()
+			rooms := menu.ShowRooms()
 			menu.ShowRoomsMenu(rooms)
 		case 2:
-			var roomNumber int
-			menu.ShowRoomsToBook()
-			fmt.Scanf("%d", &roomNumber)
-			database.BookRoom(roomNumber)
+			roomNumber := menu.ShowRoomsToBook()
+			period := menu.ShowBookingPeriod()
+			menu.BookRoomMessage(roomNumber, period)
 		case 3:
 			var roomNumber int
-			database.UnbookRoom(roomNumber)
+			menu.ShowRoomsToUnBook()
+			fmt.Scanf("%d", &roomNumber)
+			menu.UnBookRoomMessage(roomNumber)
 		case 4:
 			room := menu.ShowCreateRoomMenu()
-			database.CreateRoom(room)
+			menu.CreatedRoomMessage(room)
 		case 5:
 			var id int
 			menu.ShowDeleteText()
 			fmt.Scanf("%d", &id)
-			database.DeleteRoom(id)
+			menu.DeletedRoomMessage(id)
+		case 6:
+			roomNumber := menu.ShowReceiptMenu()
+			menu.ShowReceipt(roomNumber)
 		default:
 			fmt.Println("Ok, adeus! :D")
 			return
