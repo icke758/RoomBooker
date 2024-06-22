@@ -102,16 +102,21 @@ func ShowRoomsMenu(rooms string) {
 	fmt.Println(rooms)
 }
 
-func ShowRoomsToBook() (int, int) { //TODO: Separar essa função de mostrar entre Quarto e Periodo, pra eu poder verificar se o quarto vai poder ser reservado antes de pedir o período
-	var roomNumber, period int
-
+func ShowRoomsToBook() int {
+	var roomNumber int
 	fmt.Println("Reservar quarto")
 	fmt.Println("Quarto a ser reservado: ")
 	fmt.Scanf("%d", &roomNumber)
+
+	return roomNumber
+}
+
+func ShowBookingPeriod() int {
+	var period int
 	fmt.Println("Período da reserva: ")
 	fmt.Scanf("%d", &period)
 
-	return roomNumber, period
+	return period
 }
 
 func ShowRoomsToUnBook() {

@@ -17,7 +17,8 @@ func main() {
 			rooms := menu.ShowRooms()
 			menu.ShowRoomsMenu(rooms)
 		case 2:
-			roomNumber, period := menu.ShowRoomsToBook()
+			roomNumber := menu.ShowRoomsToBook()
+			period := menu.ShowBookingPeriod()
 			menu.BookRoomMessage(roomNumber, period)
 		case 3:
 			var roomNumber int
